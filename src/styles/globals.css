@@ -1,0 +1,1041 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Loaded via a plain Google Fonts <link> in pages/_document.tsx, not
+   next/font (which can't run in _document.tsx) — this is a static value,
+   not a next/font-generated one, precisely so it's visible at true :root
+   scope: an ancestor of both the normal render tree AND anything Radix
+   portals to document.body (Dialog, DropdownMenu, etc.), which a var
+   scoped to a lower wrapper div never reaches. */
+:root {
+  --font-lexend: "Lexend", sans-serif;
+}
+
+/* Leaflet tiles inside an animated container (e.g. our Dialog's zoom-in entrance)
+   pick up sub-pixel rounding gaps between adjacent tile images. Standard Leaflet
+   fix: force a transparent outline so the browser's rasterizer covers the seam. */
+.leaflet-tile {
+  outline: 1px solid transparent;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-lexend);
+  --font-heading: var(--font-lexend);
+
+  /* Breakpoints — Design Tokens: Grid & Breakpoints */
+  --breakpoint-sm: 36rem;
+  /* 576px, 4 col, mobile */
+  --breakpoint-lg: 64rem;
+  /* 1024px, 8 col, tablet */
+  --breakpoint-xl: 75rem;
+  /* 1200px, 12 col, desktop */
+  --breakpoint-1xl: 90rem;
+  /* 1440px, 12 col, desktop */
+  --breakpoint-2xl: 101.25rem;
+  /* 1620px, 12 col, desktop */
+
+  /* Container & Grid — Design Tokens: Grid & Breakpoints (docs/ui Design System) */
+  --container-max: 1620px;
+  /* sm — 4 col, mobile, <576 */
+  --container-margin-mobile: 16px;
+  --container-gutter-mobile: 16px;
+  /* lg — 8 col, tablet, <1024 */
+  --container-margin-tablet: 60px;
+  --container-gutter-tablet: 30px;
+  /* xl — 12 col, desktop, <1200 */
+  --container-margin-xl: 30px;
+  /* 1xl — 12 col, desktop, <1440 */
+  --container-margin-1xl: 120px;
+  /* 2xl — 12 col, desktop, >1620 */
+  --container-margin-desktop: 150px;
+  --container-gutter-desktop: 30px;
+  --container-columns-mobile: 4;
+  --container-columns-tablet: 8;
+  --container-columns-desktop: 12;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* Radius — Design Tokens: Radius (fixed scale, not derived from --radius) */
+  --radius-none: 0px;
+  --radius-sm: 0.125rem;
+  /* 2px */
+  --radius-md: 0.25rem;
+  /* 4px */
+  --radius-lg: 0.5rem;
+  /* 8px */
+  --radius-xl: 0.75rem;
+  /* 12px */
+  --radius-2xl: 1rem;
+  /* 16px */
+  --radius-3xl: 1.5rem;
+  /* 24px */
+  --radius-full: 9999px;
+
+  /* Colors — Design Tokens: docs/ui/Primitive/Value.tokens.json (Figma "Value" mode) */
+  --color-primary-50: #e5f2ff;
+  --color-primary-100: #cce4ff;
+  --color-primary-200: #99c9ff;
+  --color-primary-300: #66afff;
+  --color-primary-400: #3394ff;
+  --color-primary-500: #0079ff;
+  --color-primary-600: #0061cc;
+  --color-primary-700: #004999;
+  --color-primary-800: #003066;
+  --color-primary-900: #001833;
+  --color-primary-950: #000c19;
+
+  --color-neutral-50: #ffffff;
+  --color-neutral-100: #f7f7f7;
+  --color-neutral-200: #ededed;
+  --color-neutral-300: #d9d9d9;
+  --color-neutral-400: #bfbfbf;
+  --color-neutral-500: #9e9e9e;
+  --color-neutral-600: #7a7a7a;
+  --color-neutral-700: #555555;
+  --color-neutral-800: #333333;
+  --color-neutral-900: #1a1a1a;
+  --color-neutral-950: #000000;
+
+  --color-success-50: #e5faef;
+  --color-success-100: #cbf6df;
+  --color-success-200: #9bedc1;
+  --color-success-300: #68e4a1;
+  --color-success-400: #34db81;
+  --color-success-500: #20b364;
+  --color-success-600: #1a8f50;
+  --color-success-700: #136c3c;
+  --color-success-800: #0d4a29;
+  --color-success-900: #062313;
+  --color-success-950: #03110a;
+
+  --color-warning-50: #fef5e6;
+  --color-warning-100: #fdecd3;
+  --color-warning-200: #fcd7a1;
+  --color-warning-300: #fac475;
+  --color-warning-400: #f9b149;
+  --color-warning-500: #f79e1b;
+  --color-warning-600: #d48107;
+  --color-warning-700: #9e6006;
+  --color-warning-800: #673f04;
+  --color-warning-900: #362102;
+  --color-warning-950: #190f01;
+
+  --color-error-50: #fbeaea;
+  --color-error-100: #f7d4d5;
+  --color-error-200: #efaeaf;
+  --color-error-300: #e78484;
+  --color-error-400: #de595a;
+  --color-error-500: #d63031;
+  --color-error-600: #af2323;
+  --color-error-700: #841a1b;
+  --color-error-800: #591212;
+  --color-error-900: #2b0809;
+  --color-error-950: #150404;
+
+  --color-info-50: #e7f4fe;
+  --color-info-100: #d3eafd;
+  --color-info-200: #a8d6fa;
+  --color-info-300: #78bff8;
+  --color-info-400: #4caaf5;
+  --color-info-500: #2196f3;
+  --color-info-600: #0b79d0;
+  --color-info-700: #085a9b;
+  --color-info-800: #063e6a;
+  --color-info-900: #031f35;
+  --color-info-950: #010e18;
+
+  /* Semantic — Design Tokens: docs/ui/Semantic/Light Mode.tokens.json & Dark Mode.tokens.json */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-brand: var(--bg-brand);
+  --color-bg-brand-hover: var(--bg-brand-hover);
+  --color-bg-brand-pressed: var(--bg-brand-pressed);
+  --color-bg-brand-subtle: var(--bg-brand-subtle);
+  --color-bg-brand-disabled: var(--bg-brand-disabled);
+  --color-bg-inverse: var(--bg-inverse);
+  --color-bg-success: var(--bg-success);
+  --color-bg-success-subtle: var(--bg-success-subtle);
+  --color-bg-warning: var(--bg-warning);
+  --color-bg-warning-subtle: var(--bg-warning-subtle);
+  --color-bg-error: var(--bg-error);
+  --color-bg-error-subtle: var(--bg-error-subtle);
+  --color-bg-info: var(--bg-info);
+  --color-bg-info-subtle: var(--bg-info-subtle);
+  /* Booking-timeline-only accent — reschedule/arrived use purple/indigo,
+     which fall outside the 5-hue semantic palette (brand/success/warning/
+     error/info) by design, so they get their own dedicated tokens rather
+     than an unthemed raw Tailwind color. */
+  --color-bg-timeline-purple-subtle: var(--bg-timeline-purple-subtle);
+
+  --color-surface-transparent: var(--surface-transparent);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-brand: var(--surface-brand);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-pressed: var(--surface-pressed);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-brand: var(--text-brand);
+  --color-text-success: var(--text-success);
+  --color-text-warning: var(--text-warning);
+  --color-text-error: var(--text-error);
+  --color-text-info: var(--text-info);
+  --color-text-inverse-dark: var(--text-inverse-dark);
+  --color-text-inverse-light: var(--text-inverse-light);
+
+  --color-border-default: var(--border-default);
+  --color-border-white: var(--border-white);
+  --color-border-muted: var(--border-muted);
+  --color-border-strong: var(--border-strong);
+  --color-border-black: var(--border-black);
+  --color-border-brand: var(--border-brand);
+  --color-border-success: var(--border-success);
+  --color-border-warning: var(--border-warning);
+  --color-border-error: var(--border-error);
+  --color-border-info: var(--border-info);
+  --color-border-focus: var(--border-focus);
+
+  --color-icon-primary: var(--icon-primary);
+  --color-icon-secondary: var(--icon-secondary);
+  --color-icon-tertiary: var(--icon-tertiary);
+  --color-icon-disabled: var(--icon-disabled);
+  --color-icon-brand: var(--icon-brand);
+  --color-icon-success: var(--icon-success);
+  --color-icon-warning: var(--icon-warning);
+  --color-icon-error: var(--icon-error);
+  --color-icon-info: var(--icon-info);
+  --color-icon-inverse: var(--icon-inverse);
+  --color-icon-timeline-reschedule: var(--icon-timeline-reschedule);
+  --color-icon-timeline-arrived: var(--icon-timeline-arrived);
+
+  --color-overlay-default: var(--overlay-default);
+  --color-overlay-strong: var(--overlay-strong);
+  --color-focus-ring: var(--focus-ring);
+
+  /* Component — Design Tokens: docs/ui/Component/Value.tokens.json (light values; no dark variant supplied) */
+  --color-button-primary-bg: var(--button-primary-bg);
+  --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-primary-pressed: var(--button-primary-pressed);
+  --color-button-primary-disabled: var(--button-primary-disabled);
+  --color-button-primary-text: var(--button-primary-text);
+  --color-button-primary-border: var(--button-primary-border);
+  --color-button-primary-focus: var(--button-primary-focus);
+
+  --color-button-secondary-bg: var(--button-secondary-bg);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-button-secondary-pressed: var(--button-secondary-pressed);
+  --color-button-secondary-disabled: var(--button-secondary-disabled);
+  --color-button-secondary-text: var(--button-secondary-text);
+  --color-button-secondary-border: var(--button-secondary-border);
+  --color-button-secondary-focus: var(--button-secondary-focus);
+
+  --color-button-primary-outline-bg: var(--button-primary-outline-bg);
+  --color-button-primary-outline-hover: var(--button-primary-outline-hover);
+  --color-button-primary-outline-pressed: var(--button-primary-outline-pressed);
+  --color-button-primary-outline-disabled: var(--button-primary-outline-disabled);
+  --color-button-primary-outline-text: var(--button-primary-outline-text);
+  --color-button-primary-outline-border: var(--button-primary-outline-border);
+  --color-button-primary-outline-focus: var(--button-primary-outline-focus);
+
+  --color-button-secondary-outline-bg: var(--button-secondary-outline-bg);
+  --color-button-secondary-outline-hover: var(--button-secondary-outline-hover);
+  --color-button-secondary-outline-pressed: var(--button-secondary-outline-pressed);
+  --color-button-secondary-outline-disabled: var(--button-secondary-outline-disabled);
+  --color-button-secondary-outline-text: var(--button-secondary-outline-text);
+  --color-button-secondary-outline-border: var(--button-secondary-outline-border);
+  --color-button-secondary-outline-focus: var(--button-secondary-outline-focus);
+
+  --color-button-destructive-bg: var(--button-destructive-bg);
+  --color-button-destructive-hover: var(--button-destructive-hover);
+  --color-button-destructive-pressed: var(--button-destructive-pressed);
+  --color-button-destructive-disabled: var(--button-destructive-disabled);
+  --color-button-destructive-text: var(--button-destructive-text);
+  --color-button-destructive-border: var(--button-destructive-border);
+  --color-button-destructive-focus: var(--button-destructive-focus);
+
+  --color-button-link-primary-bg: var(--button-link-primary-bg);
+  --color-button-link-primary-hover: var(--button-link-primary-hover);
+  --color-button-link-primary-pressed: var(--button-link-primary-pressed);
+  --color-button-link-primary-disabled: var(--button-link-primary-disabled);
+  --color-button-link-primary-text: var(--button-link-primary-text);
+  --color-button-link-primary-border: var(--button-link-primary-border);
+  --color-button-link-primary-focus: var(--button-link-primary-focus);
+
+  --color-button-link-secondary-bg: var(--button-link-secondary-bg);
+  --color-button-link-secondary-hover: var(--button-link-secondary-hover);
+  --color-button-link-secondary-pressed: var(--button-link-secondary-pressed);
+  --color-button-link-secondary-disabled: var(--button-link-secondary-disabled);
+  --color-button-link-secondary-text: var(--button-link-secondary-text);
+  --color-button-link-secondary-border: var(--button-link-secondary-border);
+  --color-button-link-secondary-focus: var(--button-link-secondary-focus);
+
+  --color-form-field-bg: var(--form-field-bg);
+  --color-form-field-border: var(--form-field-border);
+  --color-form-field-hover: var(--form-field-hover);
+  --color-form-field-focus: var(--form-field-focus);
+  --color-form-field-disabled: var(--form-field-disabled);
+  --color-form-field-label: var(--form-field-label);
+  --color-form-field-placeholder: var(--form-field-placeholder);
+  --color-form-field-text: var(--form-field-text);
+  --color-form-field-helper: var(--form-field-helper);
+  --color-form-field-success: var(--form-field-success);
+  --color-form-field-success-border: var(--form-field-success-border);
+  --color-form-field-error: var(--form-field-error);
+  --color-form-field-error-border: var(--form-field-error-border);
+  --color-form-field-info-border: var(--form-field-info-border);
+  --color-form-field-warning-border: var(--form-field-warning-border);
+
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-card-shadow: var(--card-shadow);
+  --color-card-hover: var(--card-hover);
+  --color-card-selected: var(--card-selected);
+  --color-card-main-text: var(--card-main-text);
+  --color-card-secondary-text: var(--card-secondary-text);
+  --color-card-tertiary-text: var(--card-tertiary-text);
+  --color-card-disabled-text: var(--card-disabled-text);
+
+  --color-alert-success-bg: var(--alert-success-bg);
+  --color-alert-success-border: var(--alert-success-border);
+  --color-alert-success-text: var(--alert-success-text);
+  --color-alert-warning-bg: var(--alert-warning-bg);
+  --color-alert-warning-border: var(--alert-warning-border);
+  --color-alert-warning-text: var(--alert-warning-text);
+  --color-alert-error-bg: var(--alert-error-bg);
+  --color-alert-error-border: var(--alert-error-border);
+  --color-alert-error-text: var(--alert-error-text);
+  --color-alert-info-bg: var(--alert-info-bg);
+  --color-alert-info-border: var(--alert-info-border);
+  --color-alert-info-text: var(--alert-info-text);
+
+  --color-footer-main-bg: var(--footer-main-bg);
+  --color-footer-light-text: var(--footer-light-text);
+  --color-footer-light-icon: var(--footer-light-icon);
+  --color-footer-light-bg: var(--footer-light-bg);
+  --color-footer-dark-text: var(--footer-dark-text);
+  --color-footer-dark-icon: var(--footer-dark-icon);
+  --color-footer-dark-bg: var(--footer-dark-bg);
+}
+
+:root {
+  --radius: var(--radius-lg);
+
+  /* Semantic — Light Mode (references Primitive scale, per docs/ui/Semantic/Light Mode.tokens.json aliasData) */
+  --bg-primary: var(--color-neutral-50);
+  --bg-secondary: var(--color-neutral-100);
+  --bg-tertiary: var(--color-neutral-300);
+  --bg-brand: var(--color-primary-500);
+  --bg-brand-hover: var(--color-primary-600);
+  --bg-brand-pressed: var(--color-primary-700);
+  --bg-brand-subtle: var(--color-primary-50);
+  --bg-brand-disabled: var(--color-neutral-200);
+  --bg-inverse: var(--color-neutral-900);
+  --bg-success: var(--color-success-500);
+  --bg-success-subtle: var(--color-success-50);
+  --bg-warning: var(--color-warning-500);
+  --bg-warning-subtle: var(--color-warning-50);
+  --bg-error: var(--color-error-500);
+  --bg-error-subtle: var(--color-error-50);
+  --bg-info: var(--color-info-500);
+  --bg-info-subtle: var(--color-info-50);
+  --bg-timeline-purple-subtle: #e7eaf8;
+
+  /* Figma exports "Surface/Transparent" as literal Neutral/50 white in both modes
+     (token export can't represent CSS transparent) — use real transparent instead,
+     else outline/link buttons render solid white blocks in dark mode. */
+  --surface-transparent: transparent;
+  --surface-primary: var(--color-neutral-50);
+  --surface-secondary: var(--color-neutral-50);
+  --surface-elevated: var(--color-neutral-50);
+  --surface-brand: var(--color-primary-500);
+  --surface-hover: var(--color-neutral-100);
+  --surface-pressed: var(--color-neutral-200);
+
+  --text-primary: var(--color-neutral-900);
+  --text-secondary: var(--color-neutral-600);
+  --text-tertiary: var(--color-neutral-400);
+  --text-disabled: var(--color-neutral-300);
+  --text-brand: var(--color-primary-500);
+  --text-success: var(--color-success-500);
+  --text-warning: var(--color-warning-500);
+  --text-error: var(--color-error-500);
+  --text-info: var(--color-info-500);
+  --text-inverse-dark: var(--color-neutral-50);
+  --text-inverse-light: var(--color-neutral-50);
+
+  --border-default: var(--color-neutral-200);
+  --border-white: var(--color-neutral-50);
+  --border-muted: var(--color-neutral-100);
+  --border-strong: var(--color-neutral-400);
+  --border-black: var(--color-neutral-950);
+  --border-brand: var(--color-primary-500);
+  --border-success: var(--color-success-500);
+  --border-warning: var(--color-warning-500);
+  --border-error: var(--color-error-500);
+  --border-info: var(--color-info-500);
+  --border-focus: var(--color-primary-500);
+
+  --icon-primary: var(--color-neutral-800);
+  --icon-secondary: var(--color-neutral-600);
+  --icon-tertiary: var(--color-neutral-400);
+  --icon-disabled: var(--color-neutral-300);
+  --icon-brand: var(--color-primary-500);
+  --icon-success: var(--color-success-500);
+  --icon-warning: var(--color-warning-500);
+  --icon-error: var(--color-error-500);
+  --icon-info: var(--color-info-500);
+  --icon-inverse: var(--color-neutral-50);
+  --icon-timeline-reschedule: #9747ff;
+  --icon-timeline-arrived: #374fbe;
+
+  --overlay-default: rgb(2 6 23 / 40%);
+  --overlay-strong: rgb(2 6 23 / 75%);
+  --focus-ring: rgb(255 90 0 / 30%);
+
+  /* Component — references Semantic (per docs/ui/Component/Value.tokens.json aliasData); same var names work in dark mode since Semantic flips under .dark */
+  --button-primary-bg: var(--bg-brand);
+  --button-primary-hover: var(--bg-brand-hover);
+  --button-primary-pressed: var(--bg-brand-pressed);
+  --button-primary-disabled: var(--bg-brand-disabled);
+  --button-primary-text: var(--text-inverse-light);
+  --button-primary-border: var(--surface-transparent);
+  --button-primary-focus: var(--border-focus);
+
+  --button-secondary-bg: var(--bg-inverse);
+  --button-secondary-hover: var(--surface-hover);
+  --button-secondary-pressed: var(--surface-pressed);
+  --button-secondary-disabled: var(--bg-brand-disabled);
+  --button-secondary-text: var(--text-inverse-dark);
+  --button-secondary-border: var(--border-default);
+  --button-secondary-focus: var(--border-focus);
+
+  --button-primary-outline-bg: var(--surface-transparent);
+  --button-primary-outline-hover: var(--surface-hover);
+  --button-primary-outline-pressed: var(--surface-pressed);
+  --button-primary-outline-disabled: var(--surface-transparent);
+  --button-primary-outline-text: var(--text-brand);
+  --button-primary-outline-border: var(--border-brand);
+  --button-primary-outline-focus: var(--border-focus);
+
+  --button-secondary-outline-bg: var(--surface-transparent);
+  --button-secondary-outline-hover: var(--surface-hover);
+  --button-secondary-outline-pressed: var(--surface-pressed);
+  --button-secondary-outline-disabled: var(--surface-transparent);
+  --button-secondary-outline-text: var(--text-primary);
+  --button-secondary-outline-border: var(--border-black);
+  --button-secondary-outline-focus: var(--border-black);
+
+  --button-destructive-bg: var(--bg-error);
+  --button-destructive-hover: var(--bg-error-subtle);
+  --button-destructive-pressed: var(--border-error);
+  --button-destructive-disabled: var(--bg-brand-disabled);
+  --button-destructive-text: var(--text-inverse-dark);
+  --button-destructive-border: var(--surface-transparent);
+  --button-destructive-focus: var(--border-error);
+
+  --button-link-primary-bg: var(--surface-transparent);
+  --button-link-primary-hover: var(--surface-transparent);
+  --button-link-primary-pressed: var(--surface-transparent);
+  --button-link-primary-disabled: var(--surface-transparent);
+  --button-link-primary-text: var(--text-brand);
+  --button-link-primary-border: var(--surface-transparent);
+  --button-link-primary-focus: var(--border-focus);
+
+  --button-link-secondary-bg: var(--surface-transparent);
+  --button-link-secondary-hover: var(--surface-transparent);
+  --button-link-secondary-pressed: var(--surface-transparent);
+  --button-link-secondary-disabled: var(--surface-transparent);
+  --button-link-secondary-text: var(--text-primary);
+  --button-link-secondary-border: var(--surface-transparent);
+  --button-link-secondary-focus: var(--border-focus);
+
+  --form-field-bg: var(--bg-secondary);
+  --form-field-border: var(--border-default);
+  --form-field-hover: var(--border-strong);
+  --form-field-focus: var(--border-focus);
+  --form-field-disabled: var(--bg-secondary);
+  --form-field-label: var(--text-primary);
+  --form-field-placeholder: var(--text-tertiary);
+  --form-field-text: var(--text-primary);
+  --form-field-helper: var(--text-secondary);
+  --form-field-success: var(--text-success);
+  --form-field-success-border: var(--border-success);
+  --form-field-error: var(--text-error);
+  --form-field-error-border: var(--border-error);
+  --form-field-info-border: var(--border-info);
+  --form-field-warning-border: var(--border-warning);
+
+  --card-bg: var(--surface-primary);
+  --card-border: var(--border-default);
+  --card-shadow: rgb(2 6 23 / 6%);
+  --card-hover: var(--surface-hover);
+  --card-selected: var(--border-brand);
+  --card-main-text: var(--text-primary);
+  --card-secondary-text: var(--text-secondary);
+  --card-tertiary-text: var(--text-tertiary);
+  --card-disabled-text: var(--text-disabled);
+
+  --alert-success-bg: var(--bg-success-subtle);
+  --alert-success-border: var(--border-success);
+  --alert-success-text: var(--text-success);
+  --alert-warning-bg: var(--bg-warning-subtle);
+  --alert-warning-border: var(--border-warning);
+  --alert-warning-text: var(--text-warning);
+  --alert-error-bg: var(--bg-error-subtle);
+  --alert-error-border: var(--border-error);
+  --alert-error-text: var(--text-error);
+  --alert-info-bg: var(--bg-info-subtle);
+  --alert-info-border: var(--border-info);
+  --alert-info-text: var(--text-info);
+
+  /* Footer is always a fixed dark surface regardless of theme — fixed values only, per docs/ui/Component/Footer (no dark-mode variant supplied) */
+  --footer-main-bg: var(--color-neutral-950);
+  --footer-light-text: var(--color-neutral-50);
+  --footer-light-icon: var(--color-neutral-50);
+  --footer-light-bg: var(--color-neutral-50);
+  --footer-dark-text: var(--color-neutral-950);
+  --footer-dark-icon: var(--color-neutral-950);
+  --footer-dark-bg: var(--color-neutral-900);
+
+  /* shadcn/ui slots — repointed onto Semantic tokens above (no independent values) */
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+  --card: var(--card-bg);
+  --card-foreground: var(--card-main-text);
+  --popover: var(--surface-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--bg-brand);
+  --primary-foreground: var(--text-inverse-light);
+  --secondary: var(--bg-secondary);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-secondary);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--surface-hover);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--bg-error);
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--border-focus);
+}
+
+.dark {
+  /* Semantic — Dark Mode (references Primitive scale, per docs/ui/Semantic/Dark Mode.tokens.json aliasData) */
+  --bg-primary: var(--color-neutral-950);
+  --bg-secondary: var(--color-neutral-900);
+  --bg-tertiary: var(--color-neutral-800);
+  --bg-brand: var(--color-primary-500);
+  --bg-brand-hover: var(--color-primary-400);
+  --bg-brand-pressed: var(--color-primary-300);
+  --bg-brand-subtle: var(--color-neutral-900);
+  --bg-brand-disabled: var(--color-neutral-700);
+  --bg-inverse: var(--color-neutral-50);
+  --bg-success: var(--color-success-600);
+  --bg-success-subtle: var(--color-success-900);
+  --bg-warning: var(--color-warning-600);
+  --bg-warning-subtle: var(--color-warning-900);
+  --bg-error: var(--color-error-600);
+  --bg-error-subtle: var(--color-error-900);
+  --bg-info: var(--color-info-600);
+  --bg-info-subtle: var(--color-info-900);
+  --bg-timeline-purple-subtle: var(--color-neutral-900);
+
+  --surface-transparent: transparent;
+  --surface-primary: var(--color-neutral-900);
+  --surface-secondary: var(--color-neutral-50);
+  --surface-elevated: var(--color-neutral-800);
+  --surface-brand: var(--color-primary-500);
+  --surface-hover: var(--color-neutral-800);
+  --surface-pressed: var(--color-neutral-700);
+
+  --text-primary: var(--color-neutral-50);
+  --text-secondary: var(--color-neutral-300);
+  --text-tertiary: var(--color-neutral-50);
+  --text-disabled: var(--color-neutral-400);
+  --text-brand: var(--color-neutral-50);
+  --text-success: var(--color-success-400);
+  --text-warning: var(--color-warning-400);
+  --text-error: var(--color-error-400);
+  --text-info: var(--color-info-400);
+  --text-inverse-dark: var(--color-neutral-950);
+  --text-inverse-light: var(--color-neutral-50);
+
+  --border-default: var(--color-neutral-800);
+  --border-white: var(--color-neutral-900);
+  --border-muted: var(--color-neutral-900);
+  --border-strong: var(--color-neutral-600);
+  --border-black: var(--color-neutral-50);
+  --border-brand: var(--color-neutral-50);
+  --border-success: var(--color-success-400);
+  --border-warning: var(--color-warning-400);
+  --border-error: var(--color-error-400);
+  --border-info: var(--color-info-400);
+  --border-focus: var(--color-primary-400);
+
+  --icon-primary: var(--color-neutral-100);
+  --icon-secondary: var(--color-neutral-400);
+  --icon-tertiary: var(--color-neutral-500);
+  --icon-disabled: var(--color-neutral-600);
+  --icon-brand: var(--color-neutral-50);
+  --icon-success: var(--color-success-400);
+  --icon-warning: var(--color-warning-400);
+  --icon-error: var(--color-error-400);
+  --icon-info: var(--color-info-400);
+  --icon-inverse: var(--color-neutral-900);
+  --icon-timeline-reschedule: #9747ff;
+  --icon-timeline-arrived: #6b85e0;
+
+  --overlay-default: rgb(33 33 33 / 80%);
+  --overlay-strong: rgb(33 33 33 / 90%);
+  --focus-ring: rgb(255 90 0 / 50%);
+
+  /* shadcn/ui slots — repointed onto Semantic tokens above (no independent values) */
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+  --card: var(--card-bg);
+  --card-foreground: var(--card-main-text);
+  --popover: var(--surface-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--bg-brand);
+  --primary-foreground: var(--text-inverse-light);
+  --secondary: var(--bg-secondary);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-secondary);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--surface-hover);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--bg-error);
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--border-focus);
+}
+
+@keyframes hero-progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.app-loader {
+  color: var(--primary);
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+      transparent calc(50% - 0.5em),
+      var(--primary) 0 calc(50% + 0.5em),
+      transparent 0) right/300% 100%;
+  animation: loader-sweep 2s infinite alternate;
+}
+
+@keyframes loader-sweep {
+  100% {
+    background-position: left;
+  }
+}
+
+/* "Fly to cart" micro-interaction (see lib/fly-to-cart.ts): a small clone of
+   the service thumbnail that flies from the clicked Add button to the header
+   cart button, then fades. Positioned via inline left/top (the flight path
+   itself is the Web Animations API call, not this class). */
+.fly-to-cart-dot {
+  position: fixed;
+  z-index: 100;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: var(--bg-brand);
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+/* Cart icon's own landing reaction once the flyer above arrives — a plain
+   bounce, not a ring/halo, so it reads as "the icon itself reacted" rather
+   than a generic highlight. */
+@keyframes cart-icon-bounce {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  30% {
+    transform: scale(1.3) rotate(-8deg);
+  }
+
+  55% {
+    transform: scale(0.92) rotate(6deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.cart-icon-bounce {
+  animation: cart-icon-bounce 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hcs-pagination-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: var(--bg-tertiary);
+  transition: background-color 0.2s ease;
+}
+
+.swiper-pagination-bullet {
+  box-sizing: border-box;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  padding: 0;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  opacity: 1 !important;
+  background: transparent !important;
+  line-height: 0;
+  transition: border-color 0.2s ease;
+}
+
+.swiper-pagination-bullet-active {
+  padding: 1px !important;
+  outline: 1px solid var(--border-brand);
+}
+
+.swiper-pagination-bullet-active .hcs-pagination-dot {
+  background: var(--bg-brand) !important;
+  background: var(--bg-brand);
+}
+
+/* Ongoing/previous booking cards: Swiper hardcodes `.swiper-slide { height: 100% }`,
+   which (with no fixed height on the swiper root) blocks the flex container's
+   natural align-items:stretch row-height equalization — every slide just sizes to
+   its own card's content instead of matching the tallest sibling. Forcing the slide
+   back to `auto` here restores that stretch behavior for these two card types only. */
+.swiper-slide:has(> .ongoing-booking-card),
+.swiper-slide:has(> .previous-booking-card) {
+  height: auto !important;
+}
+
+/* become-provider page: swiper progress track, rendered as a normal flex
+   child outside the swiper root — swiper's own scrollbar CSS turns any
+   element it binds to into `position: absolute` (to overlay it inside the
+   swiper by default), which pulls it out of our flex layout entirely. Force
+   it back to a normal block so our gap/spacing actually applies. */
+.become-provider-steps-scrollbar.swiper-scrollbar {
+  position: relative !important;
+  inset: auto !important;
+  z-index: auto !important;
+  width: 100% !important;
+  height: 5px !important;
+  background: var(--border-default);
+  border-radius: 9999px;
+}
+
+.become-provider-steps-scrollbar .swiper-scrollbar-drag {
+  background: var(--text-primary);
+  border-radius: 9999px;
+}
+
+.hcs-carousel .swiper-pagination {
+  position: static;
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 2px;
+  gap: 4px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"],
+  [role="menuitem"],
+  [role="option"],
+  a[href],
+  label:has(input) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  [data-disabled] {
+    cursor: not-allowed;
+  }
+}
+
+@utility thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--border-strong);
+    border-radius: 9999px;
+  }
+}
+
+@utility thin-scrollbar-brand {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-brand) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--bg-brand);
+    border-radius: 9999px;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility container {
+  /* --container-max (1620px) is the design system's max CONTENT width (per
+     Frame 1920 → Container 1620 in docs/ui) — the box itself must be wider
+     by the 2xl margin on both sides, or that padding eats back into the
+     1620 instead of the content ever reaching it. */
+  max-width: calc(var(--container-max) + 2 * var(--container-margin-desktop));
+  margin-inline: auto;
+  padding-inline: var(--container-margin-mobile);
+
+  /* Per Design Tokens — Grid & Breakpoints: margin is non-monotonic by design
+     (60 → 30 → 120 → 150), not a smooth progression. */
+  @variant lg {
+    padding-inline: var(--container-margin-tablet);
+  }
+
+  @variant xl {
+    padding-inline: var(--container-margin-xl);
+  }
+
+  @variant 1xl {
+    padding-inline: var(--container-margin-1xl);
+  }
+
+  @variant 2xl {
+    padding-inline: var(--container-margin-desktop);
+  }
+}
+
+
+/* Canonical dashed divider — fine repeating-dash line (not the browser's
+   chunky default border-style:dashed rendering), using the light default
+   border token so it reads as a subtle rule, not a strong line. */
+@utility dashed-divider {
+  height: 1px;
+  width: 100%;
+  background-image: repeating-linear-gradient(to right, var(--color-border-default) 0 6px, transparent 6px 12px);
+}
+
+@utility commonPY {
+  @apply py-6 md:py-10 xl:py-16
+}
+
+/* CartMiniBar is `position: fixed`, so it never reserves document flow space —
+   without this, its two mobile variants (the home page's card above the bottom
+   nav, and the compact bar on other pages) overlap whatever content happens to
+   be at the bottom of `<main>`. `:has()` with a following-sibling combinator
+   lets `<main>` react to the (conditionally-rendered) bar showing up later in
+   the DOM, without wiring cart state through the layout tree. */
+@media (max-width: 63.999rem) {
+  .app-main:has(~ .cart-mini-bar-active) {
+    padding-bottom: 9.5rem;
+  }
+
+  .app-main:has(~ .cart-mini-bar-active-compact) {
+    padding-bottom: 6rem;
+  }
+}
+
+/* become-provider page: category marquee strip */
+@keyframes become-provider-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes become-provider-marquee-rtl {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.become-provider-marquee {
+  animation: become-provider-marquee 25s linear infinite;
+}
+
+.become-provider-marquee-rtl {
+  animation: become-provider-marquee-rtl 25s linear infinite;
+}
+
+.become-provider-marquee:hover,
+.become-provider-marquee-rtl:hover {
+  animation-play-state: paused;
+}
+
+.become-provider-clip-star {
+  clip-path: polygon(100% 50%,
+      79.42% 55.85%,
+      96.19% 69.13%,
+      74.94% 66.67%,
+      85.36% 85.36%,
+      66.67% 74.94%,
+      69.13% 96.19%,
+      55.85% 79.42%,
+      50% 100%,
+      44.15% 79.42%,
+      30.87% 96.19%,
+      33.33% 74.94%,
+      14.64% 85.36%,
+      25.06% 66.67%,
+      3.81% 69.13%,
+      20.58% 55.85%,
+      0% 50%,
+      20.58% 44.15%,
+      3.81% 30.87%,
+      25.06% 33.33%,
+      14.64% 14.64%,
+      33.33% 25.06%,
+      30.87% 3.81%,
+      44.15% 20.58%,
+      50% 0%,
+      55.85% 20.58%,
+      69.13% 3.81%,
+      66.67% 25.06%,
+      85.36% 14.64%,
+      74.94% 33.33%,
+      96.19% 30.87%,
+      79.42% 44.15%);
+}
+
+/* react-phone-input-2 country dropdown (PhoneNumberField) */
+.react-tel-input .country-list {
+  background-color: var(--form-field-bg) !important;
+  border: 1px solid var(--form-field-border) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 1px 2px 10px var(--card-shadow, rgba(0, 0, 0, 0.35)) !important;
+}
+
+.react-tel-input .country-list .country {
+  color: var(--form-field-text) !important;
+}
+
+.react-tel-input .country-list .country .dial-code {
+  color: var(--form-field-helper) !important;
+}
+
+.react-tel-input .country-list .country:hover,
+.react-tel-input .country-list .country.highlight {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.react-tel-input .country-list .divider {
+  border-bottom: 1px solid var(--form-field-border) !important;
+}
+
+.react-tel-input .country-list .no-entries-message {
+  color: var(--form-field-helper) !important;
+}
+
+.react-tel-input .country-list .search {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 8px;
+  background-color: var(--form-field-bg) !important;
+}
+
+.react-tel-input .country-list .search-box {
+  padding: 8px 10px;
+  border: 1px solid var(--form-field-border) !important;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  line-height: 18px;
+  outline: none;
+  background-color: var(--form-field-bg) !important;
+  color: var(--form-field-text) !important;
+  transition: border-color 0.15s ease;
+}
+
+.react-tel-input .country-list .search-box:focus {
+  border-color: var(--form-field-focus) !important;
+}
+
+.react-tel-input .country-list .search-emoji {
+  font-size: 14px;
+}
+
